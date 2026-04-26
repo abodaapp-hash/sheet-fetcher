@@ -1,30 +1,40 @@
 name: Fetch Google Sheet
+
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '*/30 * * * *'  # كل 30 دقيقة
   workflow_dispatch:
 
 jobs:
   fetch:
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
+
     steps:
-      - uses: actions/checkout@v4
-      
-      - uses: actions/setup-python@v5
+      - name: سحب ملفات المشروع
+        uses: actions/checkout@v4
+
+      - name: تثبيت بايثون
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      
-      - run: pip install requests
-      
+
+      - name: تثبيت المكتبات
+        run: pip install requests
+
       - name: تشغيل السكريبت
         run: python fetch_sheet.py
-      
-      - name: دفع التغييرات إلى المستودع
+
+      - name: رفع التحديثات
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
           git add data/
-          git commit -m "تحديث ملفات البيانات" || echo "لا توجد تغييرات"
+
+          # إجبار commit حتى لو مفيش تغيير
+          git commit -m "تحديث تلقائي $(date)" || git commit --allow-empty -m "force update $(date)"
+
           git push
