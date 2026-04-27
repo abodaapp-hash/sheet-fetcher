@@ -2,7 +2,7 @@ import requests
 import os
 import time
 
-URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRcHQh5q4mx9jG0FcE1JF1wQo3_luOpO1wWgE_R_iQztu3jziT7juyIWaFWpje2_QwbXnXThCl9Mv--/pub?output=csv"
+URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT7VyU_we2Rc3vYaE3ZzodM5wsub_OdlLQ5CYZPvfzlIfpXi19x58aYAavXxs0UvFuIUSnYQ0foIv41/pub?output=csv"
 os.makedirs("data", exist_ok=True)
 
 # كسر الكاش
