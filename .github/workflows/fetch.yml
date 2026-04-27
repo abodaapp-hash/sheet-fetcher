@@ -13,7 +13,7 @@ jobs:
       contents: write
 
     steps:
-      - name: سحب ملفات المشروع
+      - name: سحب المشروع
         uses: actions/checkout@v4
 
       - name: تثبيت بايثون
@@ -34,7 +34,6 @@ jobs:
 
           git add data/
 
-          # إجبار commit حتى لو مفيش تغيير
-          git commit -m "تحديث تلقائي $(date)" || git commit --allow-empty -m "force update $(date)"
+          git commit -m "تحديث تلقائي $(date)" || echo "No changes"
 
           git push
