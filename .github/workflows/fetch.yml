@@ -2,7 +2,7 @@ name: Fetch Google Sheet
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # تحديث كل 5 دقائق
+    - cron: '*/30 * * * *'  # كل 30 دقيقة
   workflow_dispatch:
 
 jobs:
@@ -20,10 +20,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
 
       - name: تثبيت المكتبات
-        run: pip install requests --quiet
+        run: pip install requests
 
       - name: تشغيل السكريبت
         run: python fetch_sheet.py
@@ -35,6 +34,6 @@ jobs:
 
           git add data/
 
-          git diff --cached --quiet || git commit -m "تحديث تلقائي $(date)"
+          git commit -m "تحديث تلقائي $(date)" || echo "No changes"
 
           git push
