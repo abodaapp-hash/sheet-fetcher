@@ -1,20 +1,38 @@
 import requests
 import os
 import time
+import re
 
-URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT7VyU_we2Rc3vYaE3ZzodM5wsub_OdlLQ5CYZPvfzlIfpXi19x58aYAavXxs0UvFuIUSnYQ0foIv41/pub?output=csv"
+URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTEbahjTUJHIyenCbyZPGQBqKN_-BYloX3NZOWV8gaY1KZbM4Fx-_7kEPi4SZDP_si511ANpKLQhstb/pub?output=csv"
+
 os.makedirs("data", exist_ok=True)
 
-# كسر الكاش
-url_with_time = URL + "&t=" + str(int(time.time()))
+url_with_time = f"{URL}&t={int(time.time())}"
 
-response = requests.get(url_with_time)
-response.encoding = 'utf-8-sig'
+try:
+    response = requests.get(url_with_time)
 
-# حفظ الملف الأساسي فقط
-with open("data/latest.csv", "w", encoding="utf-8-sig") as f:
-    f.write(response.text)
-    # إضافة سطر في النهاية للتأكد من وجود تغيير لعمل الـ Commit
-    f.write(f"\n# Last Update: {time.ctime()}")
+    if response.status_code == 200:
+        response.encoding = "utf-8-sig"
 
-print("✅ Updated latest.csv")
+        csv_text = response.text
+
+        # حذف علامات الاقتباس فقط
+        csv_text = csv_text.replace('"', '')
+
+        # تحويل فواصل الآلاف داخل الأسعار فقط
+        csv_text = re.sub(r'(\d),(\d{3})', r'\1٬\2', csv_text)
+
+        file_path = "data/gold_prices.csv"
+
+        with open(file_path, "w", encoding="utf-8-sig") as f:
+            f.write(csv_text)
+            f.write(f"\n# Last Update: {time.ctime()}")
+
+        print(f"✅ Successfully updated: {file_path}")
+
+    else:
+        print(f"❌ Error: Status code {response.status_code}")
+
+except Exception as e:
+    print(f"❌ An error occurred: {e}")
