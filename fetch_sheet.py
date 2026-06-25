@@ -23,7 +23,7 @@ try:
         # تحويل فواصل الآلاف داخل الأسعار فقط
         csv_text = re.sub(r'(\d),(\d{3})', r'\1٬\2', csv_text)
 
-        file_path = "data/gold_prices.csv"
+        file_path = "‏‏latest.csv"
 
         with open(file_path, "w", encoding="utf-8-sig") as f:
             f.write(csv_text)
