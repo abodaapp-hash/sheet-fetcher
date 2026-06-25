@@ -17,13 +17,13 @@ try:
 
         csv_text = response.text
 
-        # حذف علامات الاقتباس فقط
+        # حذف علامات الاقتباس
         csv_text = csv_text.replace('"', '')
 
-        # تحويل فواصل الآلاف داخل الأسعار فقط
+        # تحويل فواصل الآلاف إلى الفاصلة العربية
         csv_text = re.sub(r'(\d),(\d{3})', r'\1٬\2', csv_text)
 
-        file_path = "‏‏latest.csv"
+        file_path = "data/latest.csv"
 
         with open(file_path, "w", encoding="utf-8-sig") as f:
             f.write(csv_text)
